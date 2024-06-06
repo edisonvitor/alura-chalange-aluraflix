@@ -16,8 +16,8 @@ import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { VideoEntity } from './entities/video.entity';
-import { AutenticacaoGuard } from 'src/autenticacao/guards/autenticacao.guard';
-import { SkipAuth } from 'src/decorators/skip-auth.decorator';
+import { AutenticacaoGuard } from '../autenticacao/guards/autenticacao.guard';
+import { SkipAuth } from '../decorators/skip-auth.decorator';
 
 @Controller('videos')
 @UseGuards(AutenticacaoGuard)

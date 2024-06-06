@@ -4,6 +4,7 @@ import { VideoController } from './video.controller';
 import { VideoService } from './video.service';
 import { CreateVideoDto } from './dto/create-video.dto';
 import { UpdateVideoDto } from './dto/update-video.dto';
+import { JwtModule, JwtService } from '@nestjs/jwt';
 
 const videoEntityList: VideoEntity[] = [
   new VideoEntity({
@@ -12,6 +13,7 @@ const videoEntityList: VideoEntity[] = [
     descricao: 'descricao 1',
     url: 'http://url1.com',
     categoriaId: '1',
+    free: true,
   }),
   new VideoEntity({
     id: '2',
@@ -19,6 +21,39 @@ const videoEntityList: VideoEntity[] = [
     descricao: 'descricao 2',
     url: 'http://url2.com',
     categoriaId: '1',
+    free: false,
+  }),
+  new VideoEntity({
+    id: '2',
+    titulo: 'titulo 2',
+    descricao: 'descricao 2',
+    url: 'http://url2.com',
+    categoriaId: '1',
+    free: false,
+  }),
+  new VideoEntity({
+    id: '2',
+    titulo: 'titulo 2',
+    descricao: 'descricao 2',
+    url: 'http://url2.com',
+    categoriaId: '1',
+    free: false,
+  }),
+  new VideoEntity({
+    id: '2',
+    titulo: 'titulo 2',
+    descricao: 'descricao 2',
+    url: 'http://url2.com',
+    categoriaId: '1',
+    free: false,
+  }),
+  new VideoEntity({
+    id: '2',
+    titulo: 'titulo 2',
+    descricao: 'descricao 2',
+    url: 'http://url2.com',
+    categoriaId: '1',
+    free: false,
   }),
 ];
 
@@ -35,13 +70,19 @@ describe('videoController', () => {
   let videoService: VideoService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [JwtModule.register({ secret: 'secret' })],
       controllers: [VideoController],
       providers: [
+        JwtService,
         {
           provide: VideoService,
           useValue: {
             create: jest.fn().mockReturnValue(newVideoEntity),
+            findFree: jest.fn().mockResolvedValue(videoEntityList[0]),
             findAll: jest.fn().mockResolvedValue(videoEntityList),
+            findAllPaginate: jest
+              .fn()
+              .mockResolvedValue(videoEntityList.length === 5),
             findOne: jest.fn().mockResolvedValue(videoEntityList[0]),
             findVidoesByCategoria: jest
               .fn()
@@ -61,6 +102,21 @@ describe('videoController', () => {
   it('should be defined', () => {
     expect(videoController).toBeDefined();
     expect(videoService).toBeDefined();
+  });
+
+  describe('findFree', () => {
+    it('deve retornar os videos com a coluna free = true', async () => {
+      // act
+      const result = await videoController.findFree();
+
+      // assert
+      expect(result).toEqual(videoEntityList[0]);
+    });
+
+    it('deve lançar um erro', () => {
+      jest.spyOn(videoService, 'findFree').mockRejectedValueOnce(new Error());
+      expect(videoController.findFree()).rejects.toThrow();
+    });
   });
 
   describe('create', () => {
@@ -109,6 +165,23 @@ describe('videoController', () => {
     it('deve lançar um erro', () => {
       jest.spyOn(videoService, 'findAll').mockRejectedValueOnce(new Error());
       expect(videoController.findAll()).rejects.toThrow();
+    });
+  });
+
+  describe('findAllPaginated', () => {
+    it('deve retornar uma lista de videos paginada com 5 videos', async () => {
+      // act
+      const result = await videoController.findAllPaginated();
+
+      // assert
+      expect(result).toEqual(videoEntityList.length === 5);
+    });
+
+    it('deve lançar um erro', () => {
+      jest
+        .spyOn(videoService, 'findAllPaginate')
+        .mockRejectedValueOnce(new Error());
+      expect(videoController.findAllPaginated()).rejects.toThrow();
     });
   });
 

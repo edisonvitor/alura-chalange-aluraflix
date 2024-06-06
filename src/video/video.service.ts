@@ -33,7 +33,6 @@ export class VideoService {
     queryBuilder.select(['v.titulo', 'v.descricao', 'v.url']);
     queryBuilder.where('v.free = true');
     queryBuilder.orderBy('v.titulo', 'ASC');
-
     return paginate<VideoEntity>(queryBuilder, options);
   }
 
@@ -43,7 +42,6 @@ export class VideoService {
     const queryBuilder = this.videoRepository.createQueryBuilder('v');
     queryBuilder.select(['v.titulo', 'v.descricao', 'v.url']);
     queryBuilder.orderBy('v.titulo', 'ASC');
-
     return paginate<VideoEntity>(queryBuilder, options);
   }
 
