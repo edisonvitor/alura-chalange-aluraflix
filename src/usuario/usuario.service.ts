@@ -15,7 +15,7 @@ export class UsuarioService {
   private readonly usuarioRepository: Repository<UsuarioEntity>;
   async create(createUsuarioDto: CreateUsuarioDto) {
     const usuarioEntity = new UsuarioEntity();
-    const usuarioExist = await this.emailUnico(createUsuarioDto.email);
+    const usuarioExist = await this.emailIsUnique(createUsuarioDto.email);
     if (!usuarioExist) {
       throw new ConflictException('Email já cadastrado');
     }
@@ -67,7 +67,7 @@ export class UsuarioService {
     await this.usuarioRepository.delete((await usuario).id);
   }
 
-  async existeComEmail(email: string) {
+  async findByEmail(email: string) {
     const usuario = await this.usuarioRepository.findOne({
       where: { email },
     });
@@ -77,7 +77,7 @@ export class UsuarioService {
     return usuario;
   }
 
-  async emailUnico(email: string): Promise<boolean> {
+  async emailIsUnique(email: string): Promise<boolean> {
     const usuario = await this.usuarioRepository.findOne({
       where: { email },
     });

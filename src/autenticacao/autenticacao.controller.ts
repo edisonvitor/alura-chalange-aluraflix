@@ -7,7 +7,7 @@ export class AutenticacaoController {
   constructor(private readonly autenticacaoService: AutenticacaoService) {}
 
   @Post()
-  create(@Body() { email, password }: AutenticacaoDto) {
+  login(@Body() { email, password }: AutenticacaoDto) {
     return this.autenticacaoService.login(email, password);
   }
 }

@@ -16,7 +16,7 @@ import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { CategoriaEntity } from './entities/categoria.entity';
-import { AutenticacaoAdminGuard } from 'src/autenticacao/guards/autenticacao-admin.guard';
+import { AutenticacaoAdminGuard } from '../autenticacao/guards/autenticacao-admin.guard';
 import { AutenticacaoGuard } from '../autenticacao/guards/autenticacao.guard';
 
 @Controller('categorias')

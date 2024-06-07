@@ -16,7 +16,7 @@ export class CreateUsuarioDto {
     },
   )
   password: string;
-  videos: VideoEntity[];
-  createdAt: Date;
-  updatedAt: Date;
+  videos?: VideoEntity[];
+  createdAt?: Date;
+  updatedAt?: Date;
 }

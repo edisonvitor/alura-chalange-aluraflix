@@ -15,4 +15,5 @@ export class CreateVideoDto {
   @Type(() => CreateCategoriaDto)
   categoria?: CreateCategoriaDto | string;
   categoriaId?: string;
+  free?: boolean;
 }
