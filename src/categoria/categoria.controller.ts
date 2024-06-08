@@ -16,15 +16,15 @@ import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
 import { Pagination } from 'nestjs-typeorm-paginate';
 import { CategoriaEntity } from './entities/categoria.entity';
-import { AutenticacaoAdminGuard } from '../autenticacao/guards/autenticacao-admin.guard';
-import { AutenticacaoGuard } from '../autenticacao/guards/autenticacao.guard';
+import { AuthAdminGuard } from '../autenticacao/guards/auth-admin.guard';
+import { AuthGuard } from '../autenticacao/guards/auth.guard';
 
 @Controller('categorias')
-@UseGuards(AutenticacaoGuard)
+@UseGuards(AuthGuard)
 export class CategoriaController {
-  constructor(private readonly categoriaService: CategoriaService) {}
+  constructor(private readonly categoriaService: CategoriaService) { }
   @Post()
-  @UseGuards(AutenticacaoAdminGuard)
+  @UseGuards(AuthAdminGuard)
   create(@Body() createCategoriaDto: CreateCategoriaDto) {
     return this.categoriaService.create(createCategoriaDto);
   }
@@ -37,9 +37,9 @@ export class CategoriaController {
   @Get('')
   findAllPaginated(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number = 5,
+    @Query('limit', new DefaultValuePipe(5), ParseIntPipe) limit: number = 20,
   ): Promise<Pagination<CategoriaEntity>> {
-    limit = limit > 5 ? limit : 5;
+    limit = limit > 20 ? limit : 20;
     const options = {
       page,
       limit,
@@ -54,7 +54,7 @@ export class CategoriaController {
   }
 
   @Patch(':id')
-  @UseGuards(AutenticacaoAdminGuard)
+  @UseGuards(AuthAdminGuard)
   update(
     @Param('id') id: string,
     @Body() updateCategoriaDto: UpdateCategoriaDto,
@@ -63,7 +63,7 @@ export class CategoriaController {
   }
 
   @Delete(':id')
-  @UseGuards(AutenticacaoAdminGuard)
+  @UseGuards(AuthAdminGuard)
   remove(@Param('id') id: string) {
     return this.categoriaService.remove(id);
   }

@@ -8,16 +8,18 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { UsuarioPayload } from '../autenticacao.service';
 import { JwtService } from '@nestjs/jwt';
+import { UsuarioService } from 'src/usuario/usuario.service';
 
 export interface ReqUsuario extends Request {
   usuario: UsuarioPayload;
 }
 
 @Injectable()
-export class AutenticacaoGuard implements CanActivate {
+export class AuthUserGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
     private readonly reflector: Reflector,
+    private usuarioService: UsuarioService,
   ) {}
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const requisicao = context.switchToHttp().getRequest<ReqUsuario>();
@@ -35,6 +37,13 @@ export class AutenticacaoGuard implements CanActivate {
     try {
       const payload: UsuarioPayload = await this.jwtService.verifyAsync(token);
       requisicao.usuario = payload;
+      const recursoId = requisicao.params.id;
+      const usuario = await this.usuarioService.findOne(payload.sub);
+      if (recursoId) {
+        if (!usuario || usuario.id !== recursoId) {
+          throw new UnauthorizedException('Você não tem permissão');
+        }
+      }
     } catch (error) {
       throw new UnauthorizedException('jwt error');
     }

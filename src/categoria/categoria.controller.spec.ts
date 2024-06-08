@@ -4,6 +4,7 @@ import { CategoriaService } from './categoria.service';
 import { CategoriaEntity } from './entities/categoria.entity';
 import { CreateCategoriaDto } from './dto/create-categoria.dto';
 import { UpdateCategoriaDto } from './dto/update-categoria.dto';
+import { JwtModule } from '@nestjs/jwt';
 
 const categoriaEntityList: CategoriaEntity[] = [
   new CategoriaEntity({
@@ -32,6 +33,7 @@ describe('CategoriaController', () => {
   let categoriaService: CategoriaService;
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [JwtModule],
       controllers: [CategoriaController],
       providers: [
         {

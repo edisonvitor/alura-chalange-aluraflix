@@ -19,10 +19,7 @@ export class VideoEntity {
   descricao: string;
   @Column({ name: 'url', nullable: true })
   url: string;
-  @ManyToOne(() => CategoriaEntity, (categoria) => categoria.videos, {
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
+  @ManyToOne(() => CategoriaEntity, (categoria) => categoria.videos)
   categoria: CategoriaEntity;
   @Column({ name: 'categoriaId', nullable: true, default: '1' })
   categoriaId: string;

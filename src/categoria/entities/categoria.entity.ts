@@ -17,7 +17,6 @@ export class CategoriaEntity {
   @Column({ name: 'cor', length: 7, nullable: false })
   cor: string;
   @OneToMany(() => VideoEntity, (videos) => videos.categoria, {
-    cascade: true,
     eager: true,
   })
   videos: VideoEntity[];

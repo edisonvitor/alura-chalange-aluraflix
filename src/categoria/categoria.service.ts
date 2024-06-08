@@ -30,7 +30,16 @@ export class CategoriaService {
     options: IPaginationOptions,
   ): Promise<Pagination<CategoriaEntity>> {
     const queryBuilder = this.categoriaRepository.createQueryBuilder('c');
-    queryBuilder.select(['c.id', 'c.titulo', 'c.cor']);
+    queryBuilder.leftJoinAndSelect('c.videos', 'videos');
+    queryBuilder.select([
+      'c.id',
+      'c.titulo',
+      'c.cor',
+      'videos.id',
+      'videos.titulo',
+      'videos.descricao',
+      'videos.url',
+    ]);
     queryBuilder.orderBy('c.titulo', 'ASC');
 
     return paginate<CategoriaEntity>(queryBuilder, options);
@@ -64,9 +73,6 @@ export class CategoriaService {
     if (!categoriaEncontrada) {
       throw new NotFoundException(`Categoria com id ${id} não encontrada`);
     }
-    await this.categoriaRepository.delete(categoriaEncontrada);
-    return {
-      message: `Categoria com id ${id} removida com sucesso`,
-    };
+    return await this.categoriaRepository.remove(categoriaEncontrada);
   }
 }

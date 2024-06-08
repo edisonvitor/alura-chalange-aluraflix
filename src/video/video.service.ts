@@ -40,7 +40,7 @@ export class VideoService {
     options: IPaginationOptions,
   ): Promise<Pagination<VideoEntity>> {
     const queryBuilder = this.videoRepository.createQueryBuilder('v');
-    queryBuilder.select(['v.titulo', 'v.descricao', 'v.url']);
+    queryBuilder.select(['v.id', 'v.titulo', 'v.descricao', 'v.url']);
     queryBuilder.orderBy('v.titulo', 'ASC');
     return paginate<VideoEntity>(queryBuilder, options);
   }
